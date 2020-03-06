@@ -16,6 +16,11 @@ LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 MFRC522 mfrc522(SS_PIN, RST_PIN); // RFID-Empfänger benennen
 
+//led
+int red_light_pin= A1;
+int green_light_pin = A2;
+int blue_light_pin = A3;
+
 void setup() {
   //display
   lcd.begin(16, 2);
@@ -30,9 +35,15 @@ void setup() {
 
   mfrc522.PCD_Init(); // Initialisierung des RFID-Empfängers
 
+  //led
+  pinMode(red_light_pin, OUTPUT);
+  pinMode(green_light_pin, OUTPUT);
+  pinMode(blue_light_pin, OUTPUT);
+
 }
 
 void loop() {
+  RGB_color(255, 0, 0); // Red
   //rfid
   if ( ! mfrc522.PICC_IsNewCardPresent()) // Wenn keine Karte in Reichweite ist...
   
@@ -41,9 +52,7 @@ void loop() {
   return; // ...springt das Programm zurück vor die if-Schleife, womit sich die Abfrage wiederholt.
   
   }
-  
-  
-  
+    
   if ( ! mfrc522.PICC_ReadCardSerial()) // Wenn kein RFID-Sender ausgewählt wurde
   
   {
@@ -51,11 +60,7 @@ void loop() {
   return; // ...springt das Programm zurück vor die if-Schleife, womit sich die Abfrage wiederholt.
   }
   
-  
-  
   Serial.print("Die ID des RFID-TAGS lautet:"); // "Die ID des RFID-TAGS lautet:" wird auf den Serial Monitor geschrieben.
-  
-  
   
   for (byte i = 0; i < mfrc522.uid.size; i++)
   
@@ -70,4 +75,11 @@ void loop() {
   
   Serial.println(); // Mit dieser Zeile wird auf dem Serial Monitor nur ein Zeilenumbruch gemacht.
 
+}
+
+void RGB_color(int red_light_value, int green_light_value, int blue_light_value)
+ {
+  analogWrite(red_light_pin, red_light_value);
+  analogWrite(green_light_pin, green_light_value);
+  analogWrite(blue_light_pin, blue_light_value);
 }
