@@ -24,9 +24,9 @@ int blue_light_pin = A3;
 void setup() {
   //display
   lcd.begin(16, 2);
-  lcd.print("Hallo Anton du");
+  lcd.print("Bitte Karte");
   lcd.setCursor(0,1);
-  lcd.print("hast heute M SA");
+  lcd.print("Scannen");
 
   //rfid
   Serial.begin(9600); // Serielle Verbindung starten (Monitor)
@@ -43,21 +43,19 @@ void setup() {
 }
 
 void loop() {
-  RGB_color(255, 0, 0); // Red
+  //RGB_color(249, 242, 32); // Red
   //rfid
-  if ( ! mfrc522.PICC_IsNewCardPresent()) // Wenn keine Karte in Reichweite ist...
-  
-  {
-  
-  return; // ...springt das Programm zurück vor die if-Schleife, womit sich die Abfrage wiederholt.
-  
+  // Wenn keine Karte in Reichweite ist...
+  if ( ! mfrc522.PICC_IsNewCardPresent()){
+    RGB_color(255,0,0);
+    return; // ...springt das Programm zurück vor die if-Schleife, womit sich die Abfrage wiederholt.
   }
+
+  // Wenn kein RFID-Sender ausgewählt wurde
+  if ( ! mfrc522.PICC_ReadCardSerial()){
     
-  if ( ! mfrc522.PICC_ReadCardSerial()) // Wenn kein RFID-Sender ausgewählt wurde
-  
-  {
-  
-  return; // ...springt das Programm zurück vor die if-Schleife, womit sich die Abfrage wiederholt.
+    //RGB_color(255, 255, 255);
+    return; // ...springt das Programm zurück vor die if-Schleife, womit sich die Abfrage wiederholt.
   }
   
   Serial.print("Die ID des RFID-TAGS lautet:"); // "Die ID des RFID-TAGS lautet:" wird auf den Serial Monitor geschrieben.
